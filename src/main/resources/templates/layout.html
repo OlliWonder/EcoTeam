@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>EcoTeam</title>
+    <script src="/webjars/bootstrap/5.0.2/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/form_validation.js"></script>
+    <link href="/css/library.css" rel="stylesheet" media="screen">
+    <link href="/webjars/bootstrap/5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<main class="content-wrapper">
+    <div class="container mt-5 pt-4" style="margin-bottom: 70px">
+        <div layout:fragment="content">
+            <h1>Static content for prototyping purposes only</h1>
+        </div>
+    </div>
+</main>
+<footer th:insert="~{fragments/footer :: footer}" class="footer"></footer>
+</body>
+</html>

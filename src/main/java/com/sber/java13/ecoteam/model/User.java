@@ -22,7 +22,7 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class User extends GenericModel {
     
-    @Column(name = "is_company", nullable = false)
+    @Column(name = "is_company", nullable = false, columnDefinition = "boolean default false")
     private Boolean isCompany;
     
     @Column(name = "login", nullable = false, unique = true)

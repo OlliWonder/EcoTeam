@@ -1,0 +1,40 @@
+.not-enough-book {
+    color: #ff9100;
+}
+
+header {
+    background-color: #94d28b;
+}
+
+.navbar {
+    color: #0d4613;
+}
+
+.nav-link {
+    color: whitesmoke !important;
+}
+
+.btn-primary {
+    color: white !important;
+    background-color: #68e337 !important;
+    border-color: #68e337 !important;
+}
+
+.btn-primary:hover {
+    background-color: #38c00c !important;
+    border-color: #38c00c !important;
+    color: white !important;
+}
+
+.text-link {
+    text-decoration: none;
+}
+
+.text-link:hover {
+    color: #00453d;
+}
+
+.hr {
+    border: 1px solid;
+    color: #00453d;
+}
