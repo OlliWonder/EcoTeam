@@ -15,4 +15,5 @@ public class WasteDTO extends GenericDTO {
     private String code;
     private String description;
     private Set<Long> ordersIds;
+    private Set<Long> pointsIds;
 }

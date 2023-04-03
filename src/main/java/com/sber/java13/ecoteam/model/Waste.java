@@ -31,4 +31,10 @@ public class Waste extends GenericModel {
     
     @OneToMany(mappedBy = "waste", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Order> orders;
+    
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JoinTable(name = "wastes_points",
+    joinColumns = @JoinColumn(name = "waste_id"), foreignKey = @ForeignKey(name = "FK_WASTES_POINTS"),
+    inverseJoinColumns = @JoinColumn(name = "point_id"), inverseForeignKey = @ForeignKey(name = "FK_POINTS_WASTES"))
+    private Set<Point> points;
 }

@@ -12,4 +12,8 @@ public interface Errors {
     class Users {
         public static final String USER_FORBIDDEN_ERROR = "У вас нет прав просматривать информацию о пользователе";
     }
+    
+    class Points {
+        public static final String POINT_FORBIDDEN_ERROR = "Пункт приёма не может быть удалён, так как у него есть активный вид мусора";
+    }
 }

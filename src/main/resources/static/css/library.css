@@ -1,5 +1,7 @@
-.not-enough-book {
-    color: #ff9100;
+.btn-warning {
+    color: #153a13 !important;
+    background-color: #fff301 !important;
+    border-color: #fff301 !important;
 }
 
 header {
