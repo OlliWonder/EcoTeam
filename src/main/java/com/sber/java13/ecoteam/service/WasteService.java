@@ -2,8 +2,10 @@ package com.sber.java13.ecoteam.service;
 
 import com.sber.java13.ecoteam.constants.Errors;
 import com.sber.java13.ecoteam.dto.WasteDTO;
+import com.sber.java13.ecoteam.dto.WasteWithPointsDTO;
 import com.sber.java13.ecoteam.exception.MyDeleteException;
 import com.sber.java13.ecoteam.mapper.WasteMapper;
+import com.sber.java13.ecoteam.mapper.WasteWithPointsMapper;
 import com.sber.java13.ecoteam.model.Order;
 import com.sber.java13.ecoteam.model.Waste;
 import com.sber.java13.ecoteam.repository.WasteRepository;
@@ -19,16 +21,36 @@ import java.util.Set;
 @Service
 public class WasteService extends GenericService<Waste, WasteDTO> {
     private final WasteRepository wasteRepository;
+    private final WasteWithPointsMapper wasteWithPointsMapper;
     
-    public WasteService(WasteRepository wasteRepository, WasteMapper wasteMapper) {
+    public WasteService(WasteRepository wasteRepository, WasteMapper wasteMapper,
+                        WasteWithPointsMapper wasteWithPointsMapper) {
         super(wasteRepository, wasteMapper);
         this.wasteRepository = wasteRepository;
+        this.wasteWithPointsMapper = wasteWithPointsMapper;
     }
     
-    public Page<WasteDTO> findWastes(final String title, Pageable pageable) {
-        Page<Waste> wastes = wasteRepository.findAllByTitleContainsIgnoreCaseAndDeletedFalse(title, pageable);
-        List<WasteDTO> result = mapper.toDTOs(wastes.getContent());
-        return new PageImpl<>(result, pageable, wastes.getTotalElements());
+    public Page<WasteWithPointsDTO> getAllWastesWithPoints(Pageable pageable) {
+        Page<Waste> wastePage = repository.findAll(pageable);
+        List<WasteWithPointsDTO> result = wasteWithPointsMapper.toDTOs(wastePage.getContent());
+        return new PageImpl<>(result, pageable, wastePage.getTotalElements());
+    }
+    
+    public Page<WasteWithPointsDTO> getAllNotDeletedWastesWithPoints(Pageable pageable) {
+        Page<Waste> wastePage = repository.findAllByIsDeletedFalse(pageable);
+        List<WasteWithPointsDTO> result = wasteWithPointsMapper.toDTOs(wastePage.getContent());
+        return new PageImpl<>(result, pageable, wastePage.getTotalElements());
+    }
+    
+    public WasteWithPointsDTO getWasteWithPoints(Long id) {
+        return wasteWithPointsMapper.toDTO(mapper.toEntity(super.getOne(id)));
+    }
+    
+    public Page<WasteWithPointsDTO> findWastes(WasteDTO wasteDTO, Pageable pageable) {
+        Page<Waste> wastePage = wasteRepository.searchWastes(wasteDTO.getTitle(),
+                wasteDTO.getShortTitle(), wasteDTO.getCode(), pageable);
+        List<WasteWithPointsDTO> result = wasteWithPointsMapper.toDTOs(wastePage.getContent());
+        return new PageImpl<>(result, pageable, wastePage.getTotalElements());
     }
     
     @Override

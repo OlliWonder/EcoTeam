@@ -13,13 +13,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-link">
-                        <a class="nav-link" aria-current="page" href="/books">Виды мусора</a>
+                        <a class="nav-link" aria-current="page" href="/wastes">Виды мусора</a>
                     </li>
                     <li class="nav-link">
-                        <a class="nav-link" aria-current="page" href="/authors">Пункты приёма</a>
+                        <a class="nav-link" aria-current="page" href="/points">Пункты приёма</a>
                     </li>
                     <li sec:authorize="isAuthenticated() && (hasRole('USER'))" class="nav-link">
-                        <a class="nav-link" aria-current="page" th:href="'/rent/user-books/' + ${#authentication.getPrincipal().getUserId()}">Мои заказы</a>
+                        <a class="nav-link" aria-current="page" th:href="'/rent/user-orders/' + ${#authentication.getPrincipal().getUserId()}">Мои заказы</a>
                     </li>
                     <li sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('MODERATOR'))" class="nav-link">
                         <a class="nav-link" aria-current="page" href="/users/list">Пользователи</a>

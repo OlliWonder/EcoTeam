@@ -26,7 +26,7 @@ public class Waste extends GenericModel {
     @Column(name = "code", nullable = false)
     private String code;
     
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 1000)
     private String description;
     
     @OneToMany(mappedBy = "waste", cascade = {CascadeType.MERGE, CascadeType.PERSIST})

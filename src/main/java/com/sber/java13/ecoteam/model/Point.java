@@ -17,6 +17,9 @@ import java.util.Set;
 @SequenceGenerator(name = "default_generator", sequenceName = "points_seq", allocationSize = 1)
 public class Point extends GenericModel {
     
+    @Column(name = "title")
+    private String title;
+    
     @Column(name = "city")
     private String city;
     

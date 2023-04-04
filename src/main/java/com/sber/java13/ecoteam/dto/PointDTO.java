@@ -10,6 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 public class PointDTO extends GenericDTO {
+    private String title;
     private String city;
     private String address;
     private String workingTime;

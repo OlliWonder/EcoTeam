@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить вид мусора</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h3 class="mt-3 mb-3" th:text="'Обновить вид мусора ' + ${waste.getTitle()}"></h3>
+    <form enctype="multipart/form-data" class="needs-validation" novalidate style="max-width: 50vw" method="POST"
+          th:action="@{/wastes/update}" th:object="${wasteForm}">
+        <input type="hidden" name="id"
+               th:value="${waste.getId()}">
+        <div class="mt-3 row g-2">
+            <div class="col-md">
+                <div class="form-floating">
+                    <input name="title" th:value="${waste.getTitle()}" type="text" class="form-control" id="title" placeholder="Полное название"
+                           required>
+                    <label for="title">Полное название</label>
+                    <div class="invalid-feedback">Обязательное поле для заполнения</div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input name="shortTitle" th:value="${waste.getShortTitle()}" type="text" class="form-control" id="shortTitle"
+                           placeholder="Сокращённое название" required>
+                    <label for="shortTitle">Сокращённое название</label>
+                    <div class="invalid-feedback">Обязательное поле для заполнения</div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 row g-2">
+            <div class="col-md">
+                <div class="form-floating">
+                    <input name="code" th:value="${waste.getCode()}" type="text" class="form-control" id="code" placeholder="Буквенный код" required>
+                    <label for="code">Буквенный код</label>
+                    <div class="invalid-feedback">Обязательное поле для заполнения</div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input name="description" th:value="${waste.getDescription()}" type="text" class="form-control" id="description" placeholder="Описание">
+                    <label for="description">Описание</label>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 row g-2">
+            <button type="submit" class="btn btn-primary" onclick="validateForm()">Обновить</button>
+            <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
