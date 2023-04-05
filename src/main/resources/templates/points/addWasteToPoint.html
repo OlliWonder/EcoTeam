@@ -4,26 +4,26 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Добавить пункт приёма к виду мусора</title>
+    <title>Добавить вид мусора к пункту приёма</title>
 </head>
 <body>
 <div layout:fragment="content">
-    <h3 class="mt-3 mb-3" th:text="'Добавить пункт приёма к виду мусора: ' + ${waste}"></h3>
-    <form class="needs-validation" novalidate style="max-width: 50vw" method="POST" th:action="@{/wastes/add-point}"
-          th:object="${wastePointForm}">
-        <input type="hidden" name="wasteId" th:value="${wasteId}">
+    <h3 class="mt-3 mb-3" th:text="'Добавить вид мусора к пункту приёма: ' + ${point}"></h3>
+    <form class="needs-validation" novalidate style="max-width: 50vw" method="POST" th:action="@{/points/add-waste}"
+          th:object="${pointWasteForm}">
+        <input type="hidden" name="pointId" th:value="${pointId}">
         <div class="mt-3 row g-2">
             <div class="col-md">
                 <div class="form-floating">
-                    <select class="form-select" name="pointId" id="title" required>
+                    <select class="form-select" name="pointId" id="pointTitle" required>
                         <option selected th:value="${null}">Выберете пункт приёма</option>
                         <option
-                                th:each="point : ${points}"
-                                th:value="${point.getId()}"
-                                th:text="${point.getTitle()}">
+                                th:each="waste : ${wastes}"
+                                th:value="${waste.getId()}"
+                                th:text="${waste.getTitle()}">
                         </option>
                     </select>
-                    <label for="title">Название пункта</label>
+                    <label for="pointTitle">Название пункта</label>
                     <div class="invalid-feedback">Обязательное поле для заполнения</div>
                 </div>
             </div>

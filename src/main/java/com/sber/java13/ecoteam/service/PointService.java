@@ -1,10 +1,10 @@
 package com.sber.java13.ecoteam.service;
 
 import com.sber.java13.ecoteam.constants.Errors;
-import com.sber.java13.ecoteam.dto.AddWasteToPointDTO;
-import com.sber.java13.ecoteam.dto.PointDTO;
+import com.sber.java13.ecoteam.dto.*;
 import com.sber.java13.ecoteam.exception.MyDeleteException;
 import com.sber.java13.ecoteam.mapper.PointMapper;
+import com.sber.java13.ecoteam.mapper.PointWithWastesMapper;
 import com.sber.java13.ecoteam.model.Point;
 import com.sber.java13.ecoteam.model.Waste;
 import com.sber.java13.ecoteam.repository.PointRepository;
@@ -21,17 +21,36 @@ import java.util.Set;
 public class PointService extends GenericService<Point, PointDTO> {
     private final PointRepository pointRepository;
     private final WasteService wasteService;
+    private final PointWithWastesMapper pointWithWastesMapper;
     
-    protected PointService(PointRepository pointRepository, PointMapper pointMapper, WasteService wasteService) {
+    protected PointService(PointRepository pointRepository, PointMapper pointMapper, WasteService wasteService, PointWithWastesMapper pointWithWastesMapper) {
         super(pointRepository, pointMapper);
         this.pointRepository = pointRepository;
         this.wasteService = wasteService;
+        this.pointWithWastesMapper = pointWithWastesMapper;
     }
     
-    public Page<PointDTO> searchPoints(final String city, Pageable pageable) {
-        Page<Point> points = pointRepository.findAllByCityContainsIgnoreCaseAndIsDeletedFalse(city, pageable);
-        List<PointDTO> result = mapper.toDTOs(points.getContent());
-        return new PageImpl<>(result, pageable, points.getTotalElements());
+    public Page<PointWithWastesDTO> getAllPointsWithWastes(Pageable pageable) {
+        Page<Point> pointPage = repository.findAll(pageable);
+        List<PointWithWastesDTO> result = pointWithWastesMapper.toDTOs(pointPage.getContent());
+        return new PageImpl<>(result, pageable, pointPage.getTotalElements());
+    }
+    
+    public Page<PointWithWastesDTO> getAllNotDeletedPointsWithWastes(Pageable pageable) {
+        Page<Point> pointPage = repository.findAllByIsDeletedFalse(pageable);
+        List<PointWithWastesDTO> result = pointWithWastesMapper.toDTOs(pointPage.getContent());
+        return new PageImpl<>(result, pageable, pointPage.getTotalElements());
+    }
+    
+    public PointWithWastesDTO getPointWithWastes(Long id) {
+        return pointWithWastesMapper.toDTO(mapper.toEntity(super.getOne(id)));
+    }
+    
+    public Page<PointWithWastesDTO> findPoints(PointDTO pointDTO, Pageable pageable) {
+        Page<Point> pointPage = pointRepository.searchPoints(pointDTO.getTitle(),
+                pointDTO.getCity(), pointDTO.getAddress(), pageable);
+        List<PointWithWastesDTO> result = pointWithWastesMapper.toDTOs(pointPage.getContent());
+        return new PageImpl<>(result, pageable, pointPage.getTotalElements());
     }
     
     public void addWasteToPoint(AddWasteToPointDTO addWasteToPointDTO) {

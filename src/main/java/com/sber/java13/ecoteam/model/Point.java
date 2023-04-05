@@ -26,6 +26,9 @@ public class Point extends GenericModel {
     @Column(name = "address")
     private String address;
     
+    @Column(name = "phone")
+    private String phone;
+    
     @Column(name = "время работы")
     private String workingTime;
     

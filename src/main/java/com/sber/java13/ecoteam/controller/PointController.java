@@ -1,9 +1,9 @@
 package com.sber.java13.ecoteam.controller;
 
-import com.sber.java13.ecoteam.dto.WasteDTO;
-import com.sber.java13.ecoteam.dto.WasteWithPointsDTO;
+import com.sber.java13.ecoteam.dto.PointDTO;
+import com.sber.java13.ecoteam.dto.PointWithWastesDTO;
 import com.sber.java13.ecoteam.exception.MyDeleteException;
-import com.sber.java13.ecoteam.service.WasteService;
+import com.sber.java13.ecoteam.service.PointService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,13 +20,13 @@ import org.springframework.web.servlet.view.RedirectView;
 import static com.sber.java13.ecoteam.constants.UserRolesConstants.ADMIN;
 
 @Controller
-@RequestMapping("/wastes")
+@RequestMapping("/points")
 @Slf4j
-public class WasteController {
-    private final WasteService wasteService;
+public class PointController {
+    private final PointService pointService;
     
-    public WasteController(WasteService wasteService) {
-        this.wasteService = wasteService;
+    public PointController(PointService pointService) {
+        this.pointService = pointService;
     }
     
     @GetMapping("")
@@ -35,68 +35,68 @@ public class WasteController {
                          @ModelAttribute(name = "exception") final String exception,
                          Model model) {
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "title"));
-        Page<WasteWithPointsDTO> result;
+        Page<PointWithWastesDTO> result;
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         if (ADMIN.equalsIgnoreCase(userName)) {
-            result = wasteService.getAllWastesWithPoints(pageRequest);
+            result = pointService.getAllPointsWithWastes(pageRequest);
         }
         else {
-            result = wasteService.getAllNotDeletedWastesWithPoints(pageRequest);
+            result = pointService.getAllNotDeletedPointsWithWastes(pageRequest);
         }
-        model.addAttribute("wastes", result);
+        model.addAttribute("points", result);
         model.addAttribute("exception", exception);
-        return "wastes/viewAllWastes";
+        return "points/viewAllPoints";
     }
     
     @GetMapping("/{id}")
     public String getOne(@PathVariable Long id, Model model) {
-        model.addAttribute("waste", wasteService.getWasteWithPoints(id));
-        return "wastes/viewWaste";
+        model.addAttribute("point", pointService.getPointWithWastes(id));
+        return "points/viewPoint";
     }
     
     @GetMapping("/add")
     public String create() {
-        return "wastes/addWaste";
+        return "points/addPoint";
     }
     
     @PostMapping("/add")
-    public String create(@ModelAttribute("wasteForm") WasteDTO wasteDTO) {
-        wasteService.create(wasteDTO);
-        return "redirect:/wastes";
+    public String create(@ModelAttribute("pointForm") PointDTO pointDTO) {
+        pointService.create(pointDTO);
+        return "redirect:/points";
     }
     
     @GetMapping("/update/{id}")
     public String update(@PathVariable Long id, Model model) {
-        model.addAttribute("waste", wasteService.getOne(id));
-        return "wastes/updateWaste";
+        model.addAttribute("point", pointService.getOne(id));
+        return "points/updatePoint";
     }
     
     @PostMapping("/update")
-    public String update(@ModelAttribute("wasteForm") WasteDTO wasteDTO) {
-        wasteService.update(wasteDTO);
-        return "redirect:/wastes";
+    public String update(@ModelAttribute("pointForm") PointDTO pointDTO) {
+        pointService.update(pointDTO);
+        return "redirect:/points";
     }
     
     @PostMapping("/search")
-    public String searchWastes(@RequestParam(value = "page", defaultValue = "1") int page,
+    public String searchPoints(@RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "size", defaultValue = "5") int pageSize,
-                               @ModelAttribute("wasteSearchForm") WasteDTO wasteDTO,
+                               @ModelAttribute("pointSearchForm") PointDTO pointDTO,
                                Model model) {
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "title"));
-        model.addAttribute("wastes", wasteService.findWastes(wasteDTO, pageRequest));
-        return "wastes/viewAllWastes";
+        model.addAttribute("points", pointService.findPoints(pointDTO, pageRequest));
+        return "points/viewAllPoints";
     }
     
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) throws MyDeleteException {
-        wasteService.delete(id);
-        return "redirect:/wastes";
+        pointService.delete(id);
+        return "redirect:/points";
     }
     
     @GetMapping("/restore/{id}")
     public String restore(@PathVariable Long id) {
-        wasteService.restore(id);
-        return "redirect:/wastes";
+        pointService.restore(id);
+        return "redirect:/points";
     }
     
     @ExceptionHandler({MyDeleteException.class, AccessDeniedException.class})
@@ -105,6 +105,6 @@ public class WasteController {
                                     RedirectAttributes redirectAttributes) {
         log.error("Запрос: " + req.getRequestURL() + " вызвал ошибку " + ex.getMessage());
         redirectAttributes.addFlashAttribute("exception", ex.getMessage());
-        return new RedirectView("/wastes", true);
+        return new RedirectView("/points", true);
     }
 }

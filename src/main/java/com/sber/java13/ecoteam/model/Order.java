@@ -37,7 +37,7 @@ public class Order extends GenericModel {
     private Boolean isCompleted;
     
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "waste_id", foreignKey = @ForeignKey(name = "WASTE"))
+    @JoinColumn(name = "waste_id", foreignKey = @ForeignKey(name = "FK_WASTE"))
     private Waste waste;
     
     @Column(name = "weight", nullable = false)
