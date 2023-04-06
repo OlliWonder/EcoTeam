@@ -12,9 +12,9 @@ public interface SecurityConstants {
             "/webjars/bootstrap/5.0.2/**",
             "/v3/api-docs/**");
     
-    List<String> COMPANIES_WHITE_LIST = List.of("/companies",
-            "/companies/search",
-            "/companies/{id}");
+    List<String> POINTS_WHITE_LIST = List.of("/points",
+            "/points/search",
+            "/points/{id}");
     
     List<String> USERS_WHITE_LIST = List.of("/login",
             "/users/registration",
@@ -29,4 +29,8 @@ public interface SecurityConstants {
     List<String> WASTES_PERMISSION_LIST = List.of("/wastes/add",
             "/wastes/update",
             "/wastes/delete");
+    
+    List<String> POINTS_PERMISSION_LIST = List.of("/points/add",
+            "/points/update",
+            "/points/delete");
 }

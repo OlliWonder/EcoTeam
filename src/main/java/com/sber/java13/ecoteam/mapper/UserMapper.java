@@ -4,10 +4,13 @@ import com.sber.java13.ecoteam.dto.UserDTO;
 import com.sber.java13.ecoteam.model.GenericModel;
 import com.sber.java13.ecoteam.model.User;
 import com.sber.java13.ecoteam.repository.OrderRepository;
+import com.sber.java13.ecoteam.repository.PointRepository;
+import com.sber.java13.ecoteam.service.PointService;
 import com.sber.java13.ecoteam.utils.DateFormatter;
 import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import org.webjars.NotFoundException;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,20 +21,26 @@ import java.util.stream.Collectors;
 @Component
 public class UserMapper extends GenericMapper<User, UserDTO> {
     private final OrderRepository orderRepository;
+    private final PointRepository pointRepository;
+    private final PointService pointService;
     
-    protected UserMapper(ModelMapper modelMapper, OrderRepository orderRepository) {
+    protected UserMapper(ModelMapper modelMapper, OrderRepository orderRepository, PointRepository pointRepository, PointService pointService) {
         super(modelMapper, User.class, UserDTO.class);
         this.orderRepository = orderRepository;
+        this.pointRepository = pointRepository;
+        this.pointService = pointService;
     }
     
     @PostConstruct
     @Override
     protected void setupMapper() {
         modelMapper.createTypeMap(User.class, UserDTO.class)
-                .addMappings(m -> m.skip(UserDTO::setOrdersIds)).setPostConverter(toDtoConverter());
+                .addMappings(m -> m.skip(UserDTO::setOrdersIds)).setPostConverter(toDtoConverter())
+                .addMappings(m -> m.skip(UserDTO::setPointDTO)).setPostConverter(toDtoConverter());
         modelMapper.createTypeMap(UserDTO.class, User.class)
                 .addMappings(m -> m.skip(User::setOrders)).setPostConverter(toEntityConverter())
-                .addMappings(m -> m.skip(User::setBirthDate)).setPostConverter(toEntityConverter());
+                .addMappings(m -> m.skip(User::setBirthDate)).setPostConverter(toEntityConverter())
+                .addMappings(m -> m.skip(User::setPoint)).setPostConverter(toEntityConverter());
     }
     
     @Override
@@ -42,11 +51,22 @@ public class UserMapper extends GenericMapper<User, UserDTO> {
             destination.setOrders(Collections.emptySet());
         }
         destination.setBirthDate(DateFormatter.formatStringToDate(source.getBirthDate()));
+        
+        if (!Objects.isNull(source.getPointDTO())) {
+            destination.setPoint(pointRepository.findById(source.getPointDTO().getId()).orElseThrow(
+                    () -> new NotFoundException("Пункта приёма не найдено")));
+        }
+        else {
+            destination.setPoint(null);
+        }
     }
     
     @Override
     protected void mapSpecificFields(User source, UserDTO destination) {
         destination.setOrdersIds(getIds(source));
+        if (!Objects.isNull(source.getPoint())) {
+            destination.setPointDTO(pointService.getOne(source.getPoint().getId()));
+        }
     }
     
     @Override

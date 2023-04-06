@@ -1,9 +1,11 @@
 package com.sber.java13.ecoteam.controller;
 
+import com.sber.java13.ecoteam.dto.AddWasteToPointDTO;
 import com.sber.java13.ecoteam.dto.PointDTO;
 import com.sber.java13.ecoteam.dto.PointWithWastesDTO;
 import com.sber.java13.ecoteam.exception.MyDeleteException;
 import com.sber.java13.ecoteam.service.PointService;
+import com.sber.java13.ecoteam.service.WasteService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,9 +26,11 @@ import static com.sber.java13.ecoteam.constants.UserRolesConstants.ADMIN;
 @Slf4j
 public class PointController {
     private final PointService pointService;
+    private final WasteService wasteService;
     
-    public PointController(PointService pointService) {
+    public PointController(PointService pointService, WasteService wasteService) {
         this.pointService = pointService;
+        this.wasteService = wasteService;
     }
     
     @GetMapping("")
@@ -51,6 +55,7 @@ public class PointController {
     @GetMapping("/{id}")
     public String getOne(@PathVariable Long id, Model model) {
         model.addAttribute("point", pointService.getPointWithWastes(id));
+        log.info(4 + model.toString());
         return "points/viewPoint";
     }
     
@@ -62,6 +67,21 @@ public class PointController {
     @PostMapping("/add")
     public String create(@ModelAttribute("pointForm") PointDTO pointDTO) {
         pointService.create(pointDTO);
+        return "redirect:/points";
+    }
+    
+    @GetMapping("/add-waste/{pointId}")
+    public String addWaste(@PathVariable Long pointId, Model model) {
+        model.addAttribute("wastes", wasteService.listAll());
+        model.addAttribute("pointId", pointId);
+        model.addAttribute("point", pointService.getOne(pointId).getTitle());
+        return "points/addPointWaste";
+    }
+    
+    @PostMapping("/add-waste")
+    public String addWaste(@ModelAttribute("pointWasteForm") AddWasteToPointDTO addWasteToPointDTO) {
+        pointService.addWasteToPoint(addWasteToPointDTO);
+        log.info("3 " + addWasteToPointDTO.toString());
         return "redirect:/points";
     }
     

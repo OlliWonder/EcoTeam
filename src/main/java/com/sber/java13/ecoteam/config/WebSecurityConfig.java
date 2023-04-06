@@ -50,7 +50,7 @@ public class WebSecurityConfig {
 //                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(RESOURCES_WHITE_LIST.toArray(String[]::new)).permitAll()
-                        .requestMatchers(COMPANIES_WHITE_LIST.toArray(String[]::new)).permitAll()
+                        .requestMatchers(POINTS_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(WASTES_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(USERS_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(WASTES_PERMISSION_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, MODERATOR)

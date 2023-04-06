@@ -72,4 +72,8 @@ public class User extends GenericModel {
             joinColumns = @JoinColumn(name = "user_id"), foreignKey = @ForeignKey(name = "FK_USERS_ORDERS"),
             inverseJoinColumns = @JoinColumn(name = "order_id"), inverseForeignKey = @ForeignKey(name = "FK_ORDERS_USERS"))
     private Set<Order> orders;
+    
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "point_id")
+    private Point point;
 }

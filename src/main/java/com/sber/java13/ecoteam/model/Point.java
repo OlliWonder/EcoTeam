@@ -29,7 +29,7 @@ public class Point extends GenericModel {
     @Column(name = "phone")
     private String phone;
     
-    @Column(name = "время работы")
+    @Column(name = "working_time")
     private String workingTime;
     
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)

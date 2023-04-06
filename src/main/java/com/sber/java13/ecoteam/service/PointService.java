@@ -8,6 +8,7 @@ import com.sber.java13.ecoteam.mapper.PointWithWastesMapper;
 import com.sber.java13.ecoteam.model.Point;
 import com.sber.java13.ecoteam.model.Waste;
 import com.sber.java13.ecoteam.repository.PointRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class PointService extends GenericService<Point, PointDTO> {
     private final PointRepository pointRepository;
     private final WasteService wasteService;
@@ -54,8 +56,8 @@ public class PointService extends GenericService<Point, PointDTO> {
     }
     
     public void addWasteToPoint(AddWasteToPointDTO addWasteToPointDTO) {
-        PointDTO pointDTO = getOne(addWasteToPointDTO.getWasteId());
-        wasteService.getOne(addWasteToPointDTO.getPointId());
+        PointDTO pointDTO = getOne(addWasteToPointDTO.getPointId());
+        wasteService.getOne(addWasteToPointDTO.getWasteId());
         pointDTO.getWastesIds().add(addWasteToPointDTO.getWasteId());
         update(pointDTO);
     }

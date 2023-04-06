@@ -26,7 +26,7 @@ public class WasteWithPointsMapper extends GenericMapper<Waste, WasteWithPointsD
     @PostConstruct
     protected void setupMapper() {
         modelMapper.createTypeMap(Waste.class, WasteWithPointsDTO.class)
-                .addMappings(m -> m.skip(WasteWithPointsDTO::setPoints)).setPostConverter(toDtoConverter());
+                .addMappings(m -> m.skip(WasteWithPointsDTO::setPointsIds)).setPostConverter(toDtoConverter());
         modelMapper.createTypeMap(WasteWithPointsDTO.class, Waste.class)
                 .addMappings(m -> m.skip(Waste::setPoints)).setPostConverter(toEntityConverter());
     }

@@ -47,12 +47,11 @@ public class WasteMapper extends GenericMapper<Waste, WasteDTO> {
         }
         
         if (!Objects.isNull(source.getPointsIds())) {
-            destination.setPoints(new HashSet<>(pointRepository.findAllById(source.getOrdersIds())));
+            destination.setPoints(new HashSet<>(pointRepository.findAllById(source.getPointsIds())));
         }
         else {
             destination.setPoints(Collections.emptySet());
         }
-        
     }
     
     @Override

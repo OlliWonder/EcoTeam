@@ -44,13 +44,26 @@
             </div>
         </form>
         <hr class="hr"/>
+        <form class="row g-1">
+            <h4 class="mt-3 mb-3" th:text="'Информация о принимаемых видах мусора'"></h4>
+            <div th:each="waste : ${point.getWastes()}">
+                <div class="mb-2 row">
+                    <label for="wasteTitle" class="col-sm-2 col-form-label">Название:</label>
+                    <div class="col-sm-10">
+                        <a class="text-link text-blue" th:href="'/wastes/' + ${waste.getId()}"
+                           th:text="${waste.getShortTitle()}" id="wasteTitle"></a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <hr class="hr"/>
         <div class="mt-2">
             <form method="POST" th:object="${pointSearchForm}" th:action="@{/points/search/wastes}">
                 <a sec:authorize="isAuthenticated() && !hasRole('USER')" class="btn btn-primary"
                    th:href="'/points/add-waste/' + ${point.getId()}">Добавить принимаемый мусор к пункту</a>
                 <input type="hidden" name="title"
                        th:value="${point.getTitle()}">
-                <button type="submit" class="btn btn-success">Посмотреть принимаемые виды мусора</button>
+                <button type="submit" class="btn btn-success">Заказать вывоз мусора</button>
                 <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
             </form>
         </div>
