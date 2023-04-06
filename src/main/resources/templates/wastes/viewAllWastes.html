@@ -52,7 +52,7 @@
             </div>
             <div class="col">
                 <a sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('MODERATOR'))"
-                   href="wastes/add"
+                   th:href="@{/wastes/add}"
                    class="btn btn-success"
                    role="button"
                    style="float: right"

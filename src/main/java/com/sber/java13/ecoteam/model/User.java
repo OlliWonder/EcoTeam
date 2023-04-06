@@ -67,13 +67,9 @@ public class User extends GenericModel {
             foreignKey = @ForeignKey(name = "FK_PERSONS_ROLE"))
     private Role role;
     
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(name = "users_orders",
-            joinColumns = @JoinColumn(name = "user_id"), foreignKey = @ForeignKey(name = "FK_USERS_ORDERS"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"), inverseForeignKey = @ForeignKey(name = "FK_ORDERS_USERS"))
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Order> orders;
     
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "point_id")
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Point point;
 }

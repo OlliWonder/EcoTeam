@@ -16,4 +16,5 @@ public class PointDTO extends GenericDTO {
     private String phone;
     private String workingTime;
     private Set<Long> wastesIds;
+    private Long userId;
 }

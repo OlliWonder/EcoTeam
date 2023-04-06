@@ -37,4 +37,8 @@ public class Point extends GenericModel {
             joinColumns = @JoinColumn(name = "point_id"), foreignKey = @ForeignKey(name = "FK_POINTS_WASTES"),
     inverseJoinColumns = @JoinColumn(name = "waste_id"), inverseForeignKey = @ForeignKey(name = "FK_WASTES_POINTS"))
     private Set<Waste> wastes;
+    
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

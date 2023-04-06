@@ -2,10 +2,8 @@ package com.sber.java13.ecoteam.service;
 
 import com.sber.java13.ecoteam.constants.Errors;
 import com.sber.java13.ecoteam.dto.OrderDTO;
-import com.sber.java13.ecoteam.dto.OrderWithUsersDTO;
 import com.sber.java13.ecoteam.exception.MyDeleteException;
 import com.sber.java13.ecoteam.mapper.OrderMapper;
-import com.sber.java13.ecoteam.mapper.OrderWithUsersMapper;
 import com.sber.java13.ecoteam.model.Order;
 import com.sber.java13.ecoteam.repository.OrderRepository;
 import org.springframework.data.domain.Page;
@@ -21,28 +19,28 @@ import java.util.List;
 @Service
 public class OrderService extends GenericService<Order, OrderDTO> {
     private final OrderRepository orderRepository;
-    private final OrderWithUsersMapper orderWithUsersMapper;
+    private final OrderMapper orderMapper;
     
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, OrderWithUsersMapper orderWithUsersMapper) {
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper) {
         super(orderRepository, orderMapper);
         this.orderRepository = orderRepository;
-        this.orderWithUsersMapper = orderWithUsersMapper;
+        this.orderMapper = orderMapper;
     }
     
-    public Page<OrderWithUsersDTO> getAllOrdersWithUsers(Pageable pageable) {
+    public Page<OrderDTO> getAllOrdersWithUsers(Pageable pageable) {
         Page<Order> orderPage = orderRepository.findAll(pageable);
-        List<OrderWithUsersDTO> result = orderWithUsersMapper.toDTOs(orderPage.getContent());
+        List<OrderDTO> result = orderMapper.toDTOs(orderPage.getContent());
         return new PageImpl<>(result, pageable, orderPage.getTotalElements());
     }
     
-    public Page<OrderWithUsersDTO> getAllNotDeletedOrdersWithUsers(Pageable pageable) {
+    public Page<OrderDTO> getAllNotDeletedOrdersWithUsers(Pageable pageable) {
         Page<Order> orderPage = orderRepository.findAllByIsDeletedFalse(pageable);
-        List<OrderWithUsersDTO> result = orderWithUsersMapper.toDTOs(orderPage.getContent());
+        List<OrderDTO> result = orderMapper.toDTOs(orderPage.getContent());
         return new PageImpl<>(result, pageable, orderPage.getTotalElements());
     }
     
-    public OrderWithUsersDTO getOrderWithUsers(Long id) {
-        return orderWithUsersMapper.toDTO(mapper.toEntity(super.getOne(id)));
+    public OrderDTO getOrderWithUsers(Long id) {
+        return orderMapper.toDTO(mapper.toEntity(super.getOne(id)));
     }
     
     public OrderDTO create(final OrderDTO orderDTO) {

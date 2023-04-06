@@ -10,7 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 public class OrderDTO extends GenericDTO {
-    private Set<Long> usersIds;
+    private Long userId;
     private String onDate;
     private Boolean isCompleted;
     private Boolean isInWork;
