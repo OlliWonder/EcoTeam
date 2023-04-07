@@ -5,7 +5,6 @@ import com.sber.java13.ecoteam.model.GenericModel;
 import com.sber.java13.ecoteam.model.User;
 import com.sber.java13.ecoteam.repository.OrderRepository;
 import com.sber.java13.ecoteam.repository.PointRepository;
-import com.sber.java13.ecoteam.service.PointService;
 import com.sber.java13.ecoteam.utils.DateFormatter;
 import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
@@ -22,13 +21,11 @@ import java.util.stream.Collectors;
 public class UserMapper extends GenericMapper<User, UserDTO> {
     private final OrderRepository orderRepository;
     private final PointRepository pointRepository;
-    private final PointService pointService;
     
-    protected UserMapper(ModelMapper modelMapper, OrderRepository orderRepository, PointRepository pointRepository, PointService pointService) {
+    protected UserMapper(ModelMapper modelMapper, OrderRepository orderRepository, PointRepository pointRepository) {
         super(modelMapper, User.class, UserDTO.class);
         this.orderRepository = orderRepository;
         this.pointRepository = pointRepository;
-        this.pointService = pointService;
     }
     
     @PostConstruct
@@ -36,7 +33,7 @@ public class UserMapper extends GenericMapper<User, UserDTO> {
     protected void setupMapper() {
         modelMapper.createTypeMap(User.class, UserDTO.class)
                 .addMappings(m -> m.skip(UserDTO::setOrdersIds)).setPostConverter(toDtoConverter())
-                .addMappings(m -> m.skip(UserDTO::setPointDTO)).setPostConverter(toDtoConverter());
+                .addMappings(m -> m.skip(UserDTO::setPointId)).setPostConverter(toDtoConverter());
         modelMapper.createTypeMap(UserDTO.class, User.class)
                 .addMappings(m -> m.skip(User::setOrders)).setPostConverter(toEntityConverter())
                 .addMappings(m -> m.skip(User::setBirthDate)).setPostConverter(toEntityConverter())
@@ -47,25 +44,23 @@ public class UserMapper extends GenericMapper<User, UserDTO> {
     protected void mapSpecificFields(UserDTO source, User destination) {
         if (!Objects.isNull(source.getOrdersIds())) {
             destination.setOrders(new HashSet<>(orderRepository.findAllById(source.getOrdersIds())));
-        } else {
+        }
+        else {
             destination.setOrders(Collections.emptySet());
         }
         destination.setBirthDate(DateFormatter.formatStringToDate(source.getBirthDate()));
-        
-        if (!Objects.isNull(source.getPointDTO())) {
-            destination.setPoint(pointRepository.findById(source.getPointDTO().getId()).orElseThrow(
+        destination.setPoint(pointRepository.findById(source.getPointId()).orElseThrow(
                     () -> new NotFoundException("Пункта приёма не найдено")));
-        }
-        else {
-            destination.setPoint(null);
-        }
     }
     
     @Override
     protected void mapSpecificFields(User source, UserDTO destination) {
         destination.setOrdersIds(getIds(source));
         if (!Objects.isNull(source.getPoint())) {
-            destination.setPointDTO(pointService.getOne(source.getPoint().getId()));
+            destination.setPointId(source.getPoint().getId());
+        }
+        else {
+            destination.setPointId(null);
         }
     }
     

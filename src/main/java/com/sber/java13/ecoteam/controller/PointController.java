@@ -55,7 +55,6 @@ public class PointController {
     @GetMapping("/{id}")
     public String getOne(@PathVariable Long id, Model model) {
         model.addAttribute("point", pointService.getPointWithWastes(id));
-        log.info(4 + model.toString());
         return "points/viewPoint";
     }
     
@@ -81,7 +80,6 @@ public class PointController {
     @PostMapping("/add-waste")
     public String addWaste(@ModelAttribute("pointWasteForm") AddWasteToPointDTO addWasteToPointDTO) {
         pointService.addWasteToPoint(addWasteToPointDTO);
-        log.info("3 " + addWasteToPointDTO.toString());
         return "redirect:/points";
     }
     

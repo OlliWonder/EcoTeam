@@ -61,9 +61,10 @@
             <form method="POST" th:object="${pointSearchForm}" th:action="@{/points/search/wastes}">
                 <a sec:authorize="isAuthenticated() && !hasRole('USER')" class="btn btn-primary"
                    th:href="'/points/add-waste/' + ${point.getId()}">Добавить принимаемый мусор к пункту</a>
-                <input type="hidden" name="title"
-                       th:value="${point.getTitle()}">
-                <button type="submit" class="btn btn-success">Заказать вывоз мусора</button>
+                <input type="hidden" name="title" th:value="${point.getTitle()}">
+                <a th:if="${point.getWastes() != null && point.getWastes().size() > 0}" sec:authorize="hasRole('USER')"
+                   class="btn btn btn-success"
+                   th:href="'/order/fromPoint/' + ${point.id}">Создать заказ</a>
                 <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
             </form>
         </div>

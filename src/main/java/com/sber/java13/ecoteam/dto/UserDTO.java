@@ -1,7 +1,6 @@
 package com.sber.java13.ecoteam.dto;
 
 import com.sber.java13.ecoteam.model.Achievement;
-import com.sber.java13.ecoteam.model.Point;
 import lombok.*;
 
 import java.util.Set;
@@ -27,5 +26,5 @@ public class UserDTO extends GenericDTO {
     private String changePasswordToken;
     private RoleDTO role;
     private Set<Long> ordersIds;
-    private PointDTO pointDTO;
+    private Long pointId;
 }

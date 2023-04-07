@@ -14,7 +14,7 @@ public class OrderDTO extends GenericDTO {
     private String onDate;
     private Boolean isCompleted;
     private Boolean isInWork;
-    private WasteDTO wasteDTO;
     private Integer weight;
     private Long wasteId;
+    private Long pointId;
 }

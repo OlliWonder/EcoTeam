@@ -19,7 +19,7 @@
                         <a class="nav-link" aria-current="page" href="/points">Пункты приёма</a>
                     </li>
                     <li sec:authorize="isAuthenticated() && (hasRole('USER'))" class="nav-link">
-                        <a class="nav-link" aria-current="page" th:href="'/rent/user-orders/' + ${#authentication.getPrincipal().getUserId()}">Мои заказы</a>
+                        <a class="nav-link" aria-current="page" th:href="'/order/user-orders/' + ${#authentication.getPrincipal().getUserId()}">Мои заказы</a>
                     </li>
                     <li sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('MODERATOR'))" class="nav-link">
                         <a class="nav-link" aria-current="page" href="/users/list">Пользователи</a>

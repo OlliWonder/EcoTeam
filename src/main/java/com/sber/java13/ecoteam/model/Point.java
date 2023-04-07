@@ -41,4 +41,7 @@ public class Point extends GenericModel {
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+    
+    @OneToMany(mappedBy = "point", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<Order> orders;
 }

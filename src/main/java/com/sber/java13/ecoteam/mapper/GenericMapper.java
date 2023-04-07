@@ -21,7 +21,6 @@ import java.util.Set;
  */
 @Component
 public abstract class GenericMapper<E extends GenericModel, D extends GenericDTO> implements Mapper<E, D> {
-    
     protected final ModelMapper modelMapper;
     private final Class<E> entityClass;
     private final Class<D> dtoClass;

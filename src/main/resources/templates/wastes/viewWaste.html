@@ -78,7 +78,7 @@
         <div class="mt-2">
             <a th:if="${waste.getPoints() != null && waste.getPoints().size() > 0}" sec:authorize="hasRole('USER')"
                class="btn btn-sm btn-outline-success"
-               th:href="'/order/waste/' + ${waste.id}">Создать заказ</a>
+               th:href="'/order/fromWaste/' + ${waste.id}">Создать заказ</a>
             <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
         </div>
     </div>

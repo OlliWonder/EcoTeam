@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать заказ на вывоз мусора</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h3 class="mt-3 mb-3" th:text="'Организация: ' + ${point.getTitle()}"></h3>
+    <form method="POST" th:action="@{/order/fromPoint}" th:object="${orderPointForm}">
+        <input type="hidden" name="pointId" th:value="${point.getId()}">
+        <div class="mt-3 row g-2">
+            <div class="col-md">
+                <div class="form-floating">
+                    <select class="form-select" name="wasteId" id="wasteShortTitle" required>
+                        <option selected th:value="${null}">Выберете тип мусора</option>
+                        <option
+                                th:each="waste : ${wastes}"
+                                th:value="${waste.getId()}"
+                                th:text="${waste.getShortTitle()}">
+                        </option>
+                    </select>
+                    <label for="wasteShortTitle">Тип мусора</label>
+                    <div class="invalid-feedback">Обязательное поле для заполнения</div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 row g-2">
+            <div class="col-md">
+                <div class="form-floating">
+                    <input name="onDate" type="date" class="form-control" id="onDate"
+                           placeholder="Планируемая дата вывоза">
+                    <label for="onDate">Планируемая дата вывоза</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input name="weight" type="number" class="form-control" id="weight" placeholder="Вес мусора">
+                    <label for="weight">Вес мусора в кг.</label>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 row g-2">
+            <button type="submit" class="btn btn-primary">Подтвердить</button>
+            <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

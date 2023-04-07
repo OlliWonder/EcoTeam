@@ -91,7 +91,7 @@
                         </div>
 <!--                        TODO: подумать над созданием заказа-->
                         <a th:if="${waste.getPoints() != null && waste.getPoints().size() > 0}" sec:authorize="hasRole('USER')" class="btn btn-sm btn-outline-success"
-                           th:href="'/order/waste/' + ${waste.id}">Создать заказ</a>
+                           th:href="'/order/fromWaste/' + ${waste.id}">Создать заказ</a>
                     </td>
                 </tr>
                 </tbody>

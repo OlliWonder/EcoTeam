@@ -19,4 +19,6 @@ public interface OrderRepository extends GenericRepository<Order> {
     boolean checkOrderForDeletion(final Long id);
     
     Page<Order> findAllByIsDeletedFalse(Pageable pageable);
+    
+    Page<Order> getOrderByUserId(Long userId, Pageable pageable);
 }

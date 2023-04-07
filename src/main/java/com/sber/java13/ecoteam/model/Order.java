@@ -39,4 +39,8 @@ public class Order extends GenericModel {
     
     @Column(name = "weight", nullable = false)
     private Integer weight;
+    
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "point_id", foreignKey = @ForeignKey(name = "FK_POINT"))
+    private Point point;
 }
