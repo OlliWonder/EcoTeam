@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static com.sber.java13.ecoteam.constants.UserRolesConstants.ADMIN;
+import static com.sber.java13.ecoteam.constants.UserRolesConstants.AGENT;
 
 @Controller
 @RequestMapping("/users")
@@ -70,8 +71,7 @@ public class UserController {
         userDTO = userService.getUserByEmail(userDTO.getEmail());
         if (Objects.isNull(userDTO)) {
             return "redirect:/error/error-message?message=Пользователя с данным email не существует!";
-        }
-        else {
+        } else {
             userService.sendChangePasswordEmail(userDTO);
             return "redirect:/login";
         }
@@ -115,6 +115,14 @@ public class UserController {
         model.addAttribute("user", userService.getOne(Long.valueOf(id)));
         model.addAttribute("pointService", pointService);
         return "profile/viewProfile";
+    }
+    
+    @GetMapping("/forAgent/{id}")
+    public String userProfileForAgent(@PathVariable Integer id, Model model) throws AuthException {
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("user", userService.getOne(Long.valueOf(id)));
+        model.addAttribute("pointService", pointService);
+        return "profile/viewProfileForAgent";
     }
     
     @ExceptionHandler(AuthException.class)

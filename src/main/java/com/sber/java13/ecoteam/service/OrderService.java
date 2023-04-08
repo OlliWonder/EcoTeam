@@ -8,7 +8,6 @@ import com.sber.java13.ecoteam.exception.MyDeleteException;
 import com.sber.java13.ecoteam.mapper.OrderMapper;
 import com.sber.java13.ecoteam.model.Order;
 import com.sber.java13.ecoteam.repository.OrderRepository;
-import com.sber.java13.ecoteam.utils.DateFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,17 +26,26 @@ public class OrderService extends GenericService<Order, OrderDTO> {
     private final OrderMapper orderMapper;
     private final WasteService wasteService;
     private final PointService pointService;
+    private final UserService userService;
     
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, WasteService wasteService, PointService pointService) {
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, WasteService wasteService, PointService pointService, UserService userService) {
         super(orderRepository, orderMapper);
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.wasteService = wasteService;
         this.pointService = pointService;
+        this.userService = userService;
     }
     
     public Page<OrderDTO> listUserOrders(final Long id, final Pageable pageable) {
         Page<Order> objects = orderRepository.getOrderByUserId(id, pageable);
+        List<OrderDTO> results = orderMapper.toDTOs(objects.getContent());
+        return new PageImpl<>(results, pageable, objects.getTotalElements());
+    }
+    
+    public Page<OrderDTO> listAgentOrders(final Long id, final Pageable pageable) {
+        Long pointId = userService.getOne(id).getPointId();
+        Page<Order> objects = orderRepository.getOrderByPointId(pointId, pageable);
         List<OrderDTO> results = orderMapper.toDTOs(objects.getContent());
         return new PageImpl<>(results, pageable, objects.getTotalElements());
     }
@@ -107,6 +115,13 @@ public class OrderService extends GenericService<Order, OrderDTO> {
         OrderDTO orderDTO = getOne(id);
         orderDTO.setIsInWork(false);
         orderDTO.setIsCompleted(true);
+        update(orderDTO);
+    }
+    
+    public void acceptOrder(final Long id) {
+        OrderDTO orderDTO = getOne(id);
+        orderDTO.setIsInWork(true);
+        orderDTO.setIsCompleted(false);
         update(orderDTO);
     }
 }

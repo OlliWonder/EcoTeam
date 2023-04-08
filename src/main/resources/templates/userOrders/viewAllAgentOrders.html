@@ -5,17 +5,18 @@
       lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Мои заказы</title>
+    <title>Заявки</title>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="mt-5">
-        <h1>Мои заказы</h1>
+        <h1>Заявки</h1>
         <table class="table table-hover mt-3">
             <thead>
             <tr>
                 <th scope="col">Вид мусора</th>
                 <th scope="col">Исполнитель</th>
+                <th scope="col">Заказчик</th>
                 <th scope="col">Плановая дата вывоза</th>
                 <th scope="col">Вес</th>
                 <th scope="col">В работе</th>
@@ -33,30 +34,43 @@
                     <a class="text-link text-blue" th:href="'/points/' + ${order.getPointId()}"
                        th:text="${(pointService.getOne(order.getPointId())).getTitle()}"></a>
                 </td>
+                <td>
+                    <a class="text-link text-blue" th:href="'/users/forAgent/' + ${order.getUserId()}"
+                       th:text="${(userService.getOne(order.getUserId())).getFirstName()}"></a>
+                </td>
                 <td th:text="${order.getOnDate()}"></td>
                 <td th:text="${order.getWeight()}"></td>
                 <td th:text="${order.getIsInWork()} ? 'Да' : 'Нет'"></td>
                 <td th:text="${order.getIsCompleted()} ? 'Да' : 'Нет'"></td>
                 <td>
-                    <a      sec:authorize="isAuthenticated() && (hasRole('USER'))"
-                            th:if="${(!order.getIsCompleted() && !order.getIsInWork())}"
-                            th:href="'/order/cancel-order/' + ${order.getId()}"
-                            class="btn btn-secondary"
-                            role="button"
-                            aria-disabled="true">Отменить заказ</a>
+                    <a sec:authorize="isAuthenticated() && (hasRole('AGENT'))"
+                       th:if="${!order.getIsCompleted() && !order.getIsInWork()}"
+                       th:href="'/order/accept-order/' + ${order.getId()}"
+                       class="btn btn-primary"
+                       role="button"
+                       aria-disabled="true">Принять заказ</a>
+                </td>
+                <td>
+                    <a sec:authorize="isAuthenticated() && (hasRole('AGENT'))"
+                       th:if="${!order.getIsCompleted()}"
+                       th:href="'/order/cancel-order/' + ${order.getId()}"
+                       class="btn btn-secondary"
+                       role="button"
+                       aria-disabled="true">Отменить заказ</a>
                 </td>
             </tr>
             </tbody>
         </table>
         <button sec:authorize="isAuthenticated() && (hasRole('ADMIN'))" type="button" class="btn btn-secondary"
-                onclick="window.history.back()">Назад</button>
+                onclick="window.history.back()">Назад
+        </button>
     </div>
 
     <nav aria-label="Pagination" th:if="${orders.totalPages gt 0}">
         <ul class="pagination justify-content-center font-weight-bold">
             <li class="page-item" th:classappend="${orders.number eq 0} ? 'disabled'">
                 <a class="page-link"
-                   th:href="'/order/user-orders/' + ${#authentication.getPrincipal().getUserId()} + '?page=' + ${orders.number lt 2 ? 1 : orders.number}"
+                   th:href="'/order/agent-orders/' + ${#authentication.getPrincipal().getUserId()} + '?page=' + ${orders.number lt 2 ? 1 : orders.number}"
                    aria-label="Previous" title="Previous Page" data-toggle="tooltip">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -64,12 +78,12 @@
             <li class="page-item"
                 th:each="i : ${#numbers.sequence(1, orders.totalPages, 1)}"
                 th:classappend="${i eq orders.number + 1} ? 'active'">
-                <a class="page-link" th:href="'/order/user-orders/' + ${#authentication.getPrincipal().getUserId()} + '?page=' + ${i}" th:text="${i}"
+                <a class="page-link" th:href="'/order/agent-orders/' + ${#authentication.getPrincipal().getUserId()} + '?page=' + ${i}" th:text="${i}"
                    th:title="${'Page '+ i}" data-toggle="tooltip"></a>
             </li>
             <li class="page-item" th:classappend="${orders.number eq orders.totalPages - 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="'/order/user-orders/' + ${#authentication.getPrincipal().getUserId()} + '?page=' + ${orders.number + 2}"
+                   th:href="'/order/agent-orders/' + ${#authentication.getPrincipal().getUserId()} + '?page=' + ${orders.number + 2}"
                    aria-label="Next" title="Next Page" data-toggle="tooltip">
                     <span aria-hidden="true">&raquo;</span>
                 </a>

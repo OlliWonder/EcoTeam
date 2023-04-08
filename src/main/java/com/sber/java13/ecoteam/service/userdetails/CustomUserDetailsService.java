@@ -38,8 +38,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         else {
             User user = userRepository.findUserByLoginAndIsDeletedFalse(username);
             List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getRole().getId() == 1L ? "ROLE_" + UserRolesConstants.USER :
-                    "ROLE_" + UserRolesConstants.MODERATOR));
+            if (user.getRole().getId() == 1L) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + UserRolesConstants.USER));
+            }
+            else if (user.getRole().getId() == 3L) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + UserRolesConstants.AGENT));
+            }
+            else if (user.getRole().getId() == 2L) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + UserRolesConstants.MODERATOR));
+            }
             return new CustomUserDetails(user.getId().intValue(), username, user.getPassword(), authorities);
         }
     }

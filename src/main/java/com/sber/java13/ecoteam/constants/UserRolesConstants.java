@@ -4,4 +4,5 @@ public interface UserRolesConstants {
     String ADMIN = "ADMIN";
     String MODERATOR = "MODERATOR";
     String USER = "USER";
+    String AGENT = "AGENT";
 }

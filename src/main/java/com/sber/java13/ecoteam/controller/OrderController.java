@@ -50,9 +50,9 @@ public class OrderController {
     
     @GetMapping("/user-orders/{id}")
     public String userWastes(@RequestParam(value = "page", defaultValue = "1") int page,
-                            @RequestParam(value = "size", defaultValue = "5") int pageSize,
-                            @PathVariable Long id,
-                            Model model) {
+                             @RequestParam(value = "size", defaultValue = "5") int pageSize,
+                             @PathVariable Long id,
+                             Model model) {
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
         Page<OrderDTO> orderPage = orderService.listUserOrders(id, pageRequest);
         model.addAttribute("orders", orderPage);
@@ -60,6 +60,20 @@ public class OrderController {
         model.addAttribute("pointService", pointService);
         model.addAttribute("userService", userService);
         return "userOrders/viewAllUserOrders";
+    }
+    
+    @GetMapping("/agent-orders/{id}")
+    public String agentOrders(@RequestParam(value = "page", defaultValue = "1") int page,
+                              @RequestParam(value = "size", defaultValue = "5") int pageSize,
+                              @PathVariable Long id,
+                              Model model) {
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
+        Page<OrderDTO> orderPage = orderService.listAgentOrders(id, pageRequest);
+        model.addAttribute("orders", orderPage);
+        model.addAttribute("wasteService", wasteService);
+        model.addAttribute("pointService", pointService);
+        model.addAttribute("userService", userService);
+        return "userOrders/viewAllAgentOrders";
     }
     
     @GetMapping("/fromPoint/{pointId}")
@@ -83,6 +97,18 @@ public class OrderController {
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
         orderService.cancelOrder(id);
-        return "redirect:/order/user-orders/" + customUserDetails.getUserId();
+        if (userService.getOne(Long.valueOf(customUserDetails.getUserId())).getRole().getId().equals(Long.valueOf(3L))) {
+            return "redirect:/order/agent-orders/" + customUserDetails.getUserId();
+        } else {
+            return "redirect:/order/user-orders/" + customUserDetails.getUserId();
+        }
+    }
+    
+    @GetMapping("/accept-order/{id}")
+    public String acceptOrder(@PathVariable Long id) {
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        orderService.acceptOrder(id);
+        return "redirect:/order/agent-orders/" + customUserDetails.getUserId();
     }
 }
