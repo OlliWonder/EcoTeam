@@ -39,7 +39,7 @@
                 <td th:text="${order.getIsCompleted()} ? 'Да' : 'Нет'"></td>
                 <td>
                     <a      sec:authorize="isAuthenticated() && (hasRole('USER'))"
-                            th:if="!${order.getIsCompleted()}"
+                            th:if="${(!order.getIsCompleted() && !order.getIsInWork())}"
                             th:href="'/order/cancel-order/' + ${order.getId()}"
                             class="btn btn-primary"
                             role="button"

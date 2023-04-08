@@ -8,6 +8,7 @@ import com.sber.java13.ecoteam.mapper.UserMapper;
 import com.sber.java13.ecoteam.model.User;
 import com.sber.java13.ecoteam.repository.UserRepository;
 import com.sber.java13.ecoteam.utils.MailUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import java.util.UUID;
 import static com.sber.java13.ecoteam.constants.UserRolesConstants.ADMIN;
 
 @Service
+@Slf4j
 public class UserService extends GenericService<User, UserDTO> {
     private final JavaMailSender javaMailSender;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -60,6 +62,16 @@ public class UserService extends GenericService<User, UserDTO> {
         } else {
             roleDTO.setId(1L);//пользователь
         }
+        object.setRole(roleDTO);
+        object.setCreatedBy("REGISTRATION FORM");
+        object.setCreatedWhen(LocalDateTime.now());
+        object.setPassword(bCryptPasswordEncoder.encode(object.getPassword()));
+        return mapper.toDTO(repository.save(mapper.toEntity(object)));
+    }
+    
+    public UserDTO create(UserDTO object, Long roleId) {
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setId(roleId);//Агент
         object.setRole(roleDTO);
         object.setCreatedBy("REGISTRATION FORM");
         object.setCreatedWhen(LocalDateTime.now());

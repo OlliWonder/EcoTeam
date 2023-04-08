@@ -19,7 +19,7 @@
                         <option
                                 th:each="waste : ${wastes}"
                                 th:value="${waste.getId()}"
-                                th:text="${waste.getShortTitle()}">
+                                th:text="${waste.getTitle()}">
                         </option>
                     </select>
                     <label for="wasteShortTitle">Тип мусора</label>

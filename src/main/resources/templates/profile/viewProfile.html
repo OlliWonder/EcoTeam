@@ -66,6 +66,15 @@
                     <p th:text="${user.getAddress()}" type="text" readonly class="form-control-plaintext" id="address">
                 </div>
             </div>
+            <div class="mb-2 row">
+                <label for="pointId" class="col-sm-2 col-form-label no-border">Организация:</label>
+                <div class="col-sm-10">
+                    <a th:if="${user.getPointId() != null}" th:href="'/points/' + ${user.getPointId()}"
+                       th:text="${pointService.getOne(user.getPointId()).getTitle()}"
+                       class="text-link text-blue" id="pointId"></a>
+                    <a th:if="${user.getPointId() == null}">_____</a>
+                </div>
+            </div>
         </form>
         <div class="mt-2">
             <a sec:authorize="isAuthenticated() && !(hasRole('ADMIN'))"

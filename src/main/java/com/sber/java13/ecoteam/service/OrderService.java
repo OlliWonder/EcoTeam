@@ -50,7 +50,7 @@ public class OrderService extends GenericService<Order, OrderDTO> {
         pointDTO.getOrdersIds().add(orderDTO.getPointId());
 //        pointService.sendMessageToAgent(orderDTO.getUserId());
         pointService.update(pointDTO);
-        orderDTO.setIsInWork(true);
+        orderDTO.setIsInWork(false);
         orderDTO.setIsCompleted(false);
         orderDTO.setCreatedWhen(LocalDateTime.now());
         orderDTO.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -101,5 +101,12 @@ public class OrderService extends GenericService<Order, OrderDTO> {
                 () -> new NotFoundException("Заказа с заданным id=\" + id + \" не существует!"));
         unMarkAsDeleted(order);
         orderRepository.save(order);
+    }
+    
+    public void cancelOrder(final Long id) {
+        OrderDTO orderDTO = getOne(id);
+        orderDTO.setIsInWork(false);
+        orderDTO.setIsCompleted(true);
+        update(orderDTO);
     }
 }

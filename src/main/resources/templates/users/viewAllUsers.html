@@ -57,6 +57,12 @@
                    role="button"
                    style="float: right"
                    aria-disabled="true">Добавить модератора</a>
+                <a sec:authorize="isAuthenticated() && (hasRole('ADMIN'))"
+                   href="/users/add-agent"
+                   class="btn btn-primary"
+                   role="button"
+                   style="float: right"
+                   aria-disabled="true">Добавить представителя</a>
             </div>
         </div>
         <div>
@@ -64,7 +70,7 @@
                 <thead>
                 <tr>
                     <th scope="col">Логин</th>
-                    <th scope="col">Компания</th>
+                    <th scope="col">Роль</th>
                     <th scope="col">Имя</th>
                     <th scope="col">Фамилия</th>
                     <th scope="col">Отчество</th>
@@ -78,9 +84,10 @@
                 <tbody>
                 <tr th:each="user : ${users}">
                     <td>
-                        <a class="text-link text-blue" th:href="'/users/profile/' + ${user.getId()}" th:text="${user.getLogin()}"></a>
+                        <a class="text-link text-blue" th:href="'/users/profile/' + ${user.getId()}"
+                           th:text="${user.getLogin()}"></a>
                     </td>
-                    <td th:text="${user.getIsCompany()} ? 'Да' : 'Нет'"></td>
+                    <td th:text="${user.getRole().getTitle()}"></td>
                     <td th:text="${user.getFirstName()}"></td>
                     <td th:text="${user.getLastName()}"></td>
                     <td th:text="${user.getMiddleName()}"></td>
@@ -90,9 +97,11 @@
                     <td th:text="${user.getIsDeleted()} ? 'Да' : 'Нет'"></td>
                     <td>
                         <div sec:authorize="isAuthenticated() && (hasRole('ADMIN'))">
-                            <a th:if="${!user.getIsDeleted()}" class="btn btn-sm btn-outline-danger" th:href="'/users/delete/' + ${user.getId()}"
+                            <a th:if="${!user.getIsDeleted()}" class="btn btn-sm btn-outline-danger"
+                               th:href="'/users/delete/' + ${user.getId()}"
                                onclick="return confirm('Вы действительно хотите удалить пользователя?');">Удалить</a>
-                            <a th:if="${user.getIsDeleted()}" class="btn btn-sm btn-outline-warning" th:href="'/users/restore/' + ${user.getId()}">Восстановить</a>
+                            <a th:if="${user.getIsDeleted()}" class="btn btn-sm btn-outline-warning"
+                               th:href="'/users/restore/' + ${user.getId()}">Восстановить</a>
                         </div>
                     </td>
                 </tr>
@@ -101,7 +110,8 @@
         </div>
     </div>
     <!--Модальное окно для ошибок старт-->
-    <div th:if="${exception != null && exception != ''}" class="modal fade" id="deleteErrorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div th:if="${exception != null && exception != ''}" class="modal fade" id="deleteErrorModal" tabindex="-1"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

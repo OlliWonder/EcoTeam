@@ -3,6 +3,7 @@ package com.sber.java13.ecoteam.controller;
 import com.sber.java13.ecoteam.dto.OrderDTO;
 import com.sber.java13.ecoteam.service.OrderService;
 import com.sber.java13.ecoteam.service.PointService;
+import com.sber.java13.ecoteam.service.UserService;
 import com.sber.java13.ecoteam.service.WasteService;
 import com.sber.java13.ecoteam.service.userdetails.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -22,11 +23,13 @@ public class OrderController {
     private final OrderService orderService;
     private final WasteService wasteService;
     private final PointService pointService;
+    private final UserService userService;
     
-    public OrderController(OrderService orderService, WasteService wasteService, PointService pointService) {
+    public OrderController(OrderService orderService, WasteService wasteService, PointService pointService, UserService userService) {
         this.orderService = orderService;
         this.wasteService = wasteService;
         this.pointService = pointService;
+        this.userService = userService;
     }
     
     @GetMapping("/fromWaste/{wasteId}")
@@ -55,6 +58,7 @@ public class OrderController {
         model.addAttribute("orders", orderPage);
         model.addAttribute("wasteService", wasteService);
         model.addAttribute("pointService", pointService);
+        model.addAttribute("userService", userService);
         return "userOrders/viewAllUserOrders";
     }
     
@@ -71,6 +75,14 @@ public class OrderController {
                 .getAuthentication().getPrincipal();
         orderDTO.setUserId(Long.valueOf(customUserDetails.getUserId()));
         orderService.orderWaste(orderDTO);
+        return "redirect:/order/user-orders/" + customUserDetails.getUserId();
+    }
+    
+    @GetMapping("/cancel-order/{id}")
+    public String cancelOrder(@PathVariable Long id) {
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        orderService.cancelOrder(id);
         return "redirect:/order/user-orders/" + customUserDetails.getUserId();
     }
 }

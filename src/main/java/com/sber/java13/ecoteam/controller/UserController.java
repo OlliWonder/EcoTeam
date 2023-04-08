@@ -3,6 +3,7 @@ package com.sber.java13.ecoteam.controller;
 import com.sber.java13.ecoteam.constants.Errors;
 import com.sber.java13.ecoteam.dto.UserDTO;
 import com.sber.java13.ecoteam.exception.MyDeleteException;
+import com.sber.java13.ecoteam.service.PointService;
 import com.sber.java13.ecoteam.service.UserService;
 import com.sber.java13.ecoteam.service.userdetails.CustomUserDetails;
 import jakarta.security.auth.message.AuthException;
@@ -31,9 +32,11 @@ import static com.sber.java13.ecoteam.constants.UserRolesConstants.ADMIN;
 @Slf4j
 public class UserController {
     private final UserService userService;
+    private final PointService pointService;
     
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PointService pointService) {
         this.userService = userService;
+        this.pointService = pointService;
     }
     
     @GetMapping("/registration")
@@ -100,8 +103,7 @@ public class UserController {
     }
     
     @GetMapping("/profile/{id}")
-    public String userProfile(@PathVariable Integer id,
-                              Model model) throws AuthException {
+    public String userProfile(@PathVariable Integer id, Model model) throws AuthException {
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!Objects.isNull(customUserDetails.getUserId())) {
             if (!ADMIN.equalsIgnoreCase(customUserDetails.getUsername())) {
@@ -111,6 +113,7 @@ public class UserController {
             }
         }
         model.addAttribute("user", userService.getOne(Long.valueOf(id)));
+        model.addAttribute("pointService", pointService);
         return "profile/viewProfile";
     }
     
@@ -183,9 +186,8 @@ public class UserController {
         return "users/addModerator";
     }
     
-    @PostMapping("add-moderator")
-    public String addModerator(@ModelAttribute("userForm") UserDTO userDTO,
-                               BindingResult bindingResult) {
+    @PostMapping("/add-moderator")
+    public String addModerator(@ModelAttribute("userForm") UserDTO userDTO, BindingResult bindingResult) {
         if (userDTO.getLogin().equalsIgnoreCase(ADMIN) || userService.getUserByLogin(userDTO.getLogin()) != null) {
             bindingResult.rejectValue("login", "error.login", "Такой логин уже существует");
             return "registration";
@@ -207,6 +209,28 @@ public class UserController {
     @GetMapping("/restore/{id}")
     public String restore(@PathVariable Long id) {
         userService.restore(id);
+        return "redirect:/users/list";
+    }
+    
+    @GetMapping("/add-agent")
+    public String addAgentPage(Model model) {
+        model.addAttribute("userForm", new UserDTO());
+        model.addAttribute("points", pointService.listAll());
+        return "users/addAgent";
+    }
+    
+    @PostMapping("/add-agent")
+    public String addAgent(@ModelAttribute("userForm") UserDTO userDTO, BindingResult bindingResult) {
+        if (userDTO.getLogin().equalsIgnoreCase(ADMIN) || userService.getUserByLogin(userDTO.getLogin()) != null) {
+            bindingResult.rejectValue("login", "error.login", "Такой логин уже существует");
+            return "registration";
+        }
+        if (userService.getUserByEmail(userDTO.getEmail()) != null) {
+            bindingResult.rejectValue("email", "error.email", "Такой email уже существует");
+            return "registration";
+        }
+        Long roleId = 3L;
+        userService.create(userDTO, roleId);
         return "redirect:/users/list";
     }
 }

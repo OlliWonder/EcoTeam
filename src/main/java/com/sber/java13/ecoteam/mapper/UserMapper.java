@@ -49,8 +49,14 @@ public class UserMapper extends GenericMapper<User, UserDTO> {
             destination.setOrders(Collections.emptySet());
         }
         destination.setBirthDate(DateFormatter.formatStringToDate(source.getBirthDate()));
-        destination.setPoint(pointRepository.findById(source.getPointId()).orElseThrow(
+        
+        if (!Objects.isNull(source.getPointId())) {
+            destination.setPoint(pointRepository.findById(source.getPointId()).orElseThrow(
                     () -> new NotFoundException("Пункта приёма не найдено")));
+        }
+        else {
+            destination.setPoint(null);
+        }
     }
     
     @Override

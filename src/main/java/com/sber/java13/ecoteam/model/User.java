@@ -22,9 +22,6 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class User extends GenericModel {
     
-    @Column(name = "is_company", nullable = false, columnDefinition = "boolean default false")
-    private Boolean isCompany;
-    
     @Column(name = "login", nullable = false, unique = true)
     private String login;
     
@@ -70,6 +67,7 @@ public class User extends GenericModel {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Order> orders;
     
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "point_id", referencedColumnName = "id")
     private Point point;
 }

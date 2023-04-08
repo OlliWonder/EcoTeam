@@ -11,7 +11,6 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 public class UserDTO extends GenericDTO {
-    private Boolean isCompany;
     private String login;
     private String password;
     private String firstName;

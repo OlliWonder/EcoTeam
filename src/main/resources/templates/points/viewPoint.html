@@ -51,7 +51,7 @@
                     <label for="wasteTitle" class="col-sm-2 col-form-label">Название:</label>
                     <div class="col-sm-10">
                         <a class="text-link text-blue" th:href="'/wastes/' + ${waste.getId()}"
-                           th:text="${waste.getShortTitle()}" id="wasteTitle"></a>
+                           th:text="${waste.getTitle()}" id="wasteTitle"></a>
                     </div>
                 </div>
             </div>
