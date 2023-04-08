@@ -117,4 +117,8 @@ public class UserService extends GenericService<User, UserDTO> {
         unMarkAsDeleted(user);
         repository.save(user);
     }
+    
+    public List<String> getAgentsEmailsWithNotCompletedAndNotInWorkOrders() {
+        return ((UserRepository) repository).getAgentsEmails();
+    }
 }

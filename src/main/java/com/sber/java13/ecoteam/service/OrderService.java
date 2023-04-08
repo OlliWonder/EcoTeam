@@ -56,7 +56,6 @@ public class OrderService extends GenericService<Order, OrderDTO> {
         wasteService.update(wasteDTO);
         PointDTO pointDTO = pointService.getOne(orderDTO.getPointId());
         pointDTO.getOrdersIds().add(orderDTO.getPointId());
-//        pointService.sendMessageToAgent(orderDTO.getUserId());
         pointService.update(pointDTO);
         orderDTO.setIsInWork(false);
         orderDTO.setIsCompleted(false);
