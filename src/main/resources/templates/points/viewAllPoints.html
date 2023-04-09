@@ -100,7 +100,7 @@
                         <!--                        TODO: подумать над созданием заказа-->
                         <a th:if="${point.getWastes() != null && point.getWastes().size() > 0}"
                            sec:authorize="hasRole('USER')" class="btn btn-sm btn-outline-success"
-                           th:href="'/order/point/' + ${point.id}">Создать заказ</a>
+                           th:href="'/order/fromPoint/' + ${point.id}">Создать заказ</a>
                     </td>
                 </tr>
                 </tbody>
