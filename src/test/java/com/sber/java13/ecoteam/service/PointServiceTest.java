@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 public class PointServiceTest extends GenericTest<Point, PointDTO>{
+    
     public PointServiceTest() {
         super();
         PointWithWastesMapper pointWithWastesMapper = Mockito.mock(PointWithWastesMapper.class);
