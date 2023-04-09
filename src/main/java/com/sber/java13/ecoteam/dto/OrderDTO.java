@@ -17,4 +17,5 @@ public class OrderDTO extends GenericDTO {
     private Integer weight;
     private Long wasteId;
     private Long pointId;
+    private boolean isDeleted;
 }

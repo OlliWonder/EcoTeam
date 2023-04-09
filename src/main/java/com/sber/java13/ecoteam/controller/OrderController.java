@@ -111,4 +111,12 @@ public class OrderController {
         orderService.acceptOrder(id);
         return "redirect:/order/agent-orders/" + customUserDetails.getUserId();
     }
+    
+    @GetMapping("/complete-order/{id}")
+    public String completeOrder(@PathVariable Long id) {
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        orderService.completeOrder(id);
+        return "redirect:/order/agent-orders/" + customUserDetails.getUserId();
+    }
 }

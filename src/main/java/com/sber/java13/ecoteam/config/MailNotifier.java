@@ -33,7 +33,7 @@ public class MailNotifier {
         List<String> emails = userService.getAgentsEmailsWithNotCompletedAndNotInWorkOrders();
         if (emails.size() > 0) {
             simpleMailMessage.setTo(emails.toArray(new String[0]));
-            simpleMailMessage.setSubject("Напоминание о непринятых а работу заказах");
+            simpleMailMessage.setSubject("Напоминание о непринятых в работу заказах");
             simpleMailMessage.setText("Добрый день. Вы получили это письмо, так как у вас есть не принятый в работу заказ. " +
                     "Пожалуйста, проверьте личный кабинет на наличие новых заказов." +
                     "С уважением, EcoTeam.");

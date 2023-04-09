@@ -21,6 +21,8 @@
                 <th scope="col">Вес</th>
                 <th scope="col">В работе</th>
                 <th scope="col">Выполнен</th>
+                <th scope="col">Действия</th>
+                <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -49,6 +51,14 @@
                        class="btn btn-primary"
                        role="button"
                        aria-disabled="true">Принять заказ</a>
+                </td>
+                <td>
+                    <a sec:authorize="isAuthenticated() && (hasRole('AGENT'))"
+                       th:if="${!order.getIsCompleted() && order.getIsInWork()}"
+                       th:href="'/order/complete-order/' + ${order.getId()}"
+                       class="btn btn-success"
+                       role="button"
+                       aria-disabled="true">Выполнен</a>
                 </td>
                 <td>
                     <a sec:authorize="isAuthenticated() && (hasRole('AGENT'))"

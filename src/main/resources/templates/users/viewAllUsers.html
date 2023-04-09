@@ -57,7 +57,7 @@
                    role="button"
                    style="float: right"
                    aria-disabled="true">Добавить модератора</a>
-                <a sec:authorize="isAuthenticated() && (hasRole('ADMIN'))"
+                <a sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('MODERATOR'))"
                    href="/users/add-agent"
                    class="btn btn-primary"
                    role="button"

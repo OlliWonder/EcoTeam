@@ -64,22 +64,6 @@ public class OrderService extends GenericService<Order, OrderDTO> {
         return mapper.toDTO(repository.save(mapper.toEntity(orderDTO)));
     }
     
-    public Page<OrderDTO> getAllOrdersWithUsers(Pageable pageable) {
-        Page<Order> orderPage = orderRepository.findAll(pageable);
-        List<OrderDTO> result = orderMapper.toDTOs(orderPage.getContent());
-        return new PageImpl<>(result, pageable, orderPage.getTotalElements());
-    }
-    
-    public Page<OrderDTO> getAllNotDeletedOrdersWithUsers(Pageable pageable) {
-        Page<Order> orderPage = orderRepository.findAllByIsDeletedFalse(pageable);
-        List<OrderDTO> result = orderMapper.toDTOs(orderPage.getContent());
-        return new PageImpl<>(result, pageable, orderPage.getTotalElements());
-    }
-    
-    public OrderDTO getOrderWithUsers(Long id) {
-        return orderMapper.toDTO(mapper.toEntity(super.getOne(id)));
-    }
-    
     public OrderDTO create(final OrderDTO orderDTO) {
         orderDTO.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         orderDTO.setCreatedWhen(LocalDateTime.now());
@@ -121,6 +105,13 @@ public class OrderService extends GenericService<Order, OrderDTO> {
         OrderDTO orderDTO = getOne(id);
         orderDTO.setIsInWork(true);
         orderDTO.setIsCompleted(false);
+        update(orderDTO);
+    }
+    
+    public void completeOrder(final Long id) {
+        OrderDTO orderDTO = getOne(id);
+        orderDTO.setIsInWork(false);
+        orderDTO.setIsCompleted(true);
         update(orderDTO);
     }
 }
