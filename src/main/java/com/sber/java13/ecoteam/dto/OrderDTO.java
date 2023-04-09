@@ -2,8 +2,6 @@ package com.sber.java13.ecoteam.dto;
 
 import lombok.*;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @NoArgsConstructor

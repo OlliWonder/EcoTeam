@@ -18,4 +18,5 @@ public class PointDTO extends GenericDTO {
     private Set<Long> wastesIds;
     private Long userId;
     private Set<Long> ordersIds;
+    private boolean isDeleted;
 }

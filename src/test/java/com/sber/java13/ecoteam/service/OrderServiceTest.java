@@ -76,7 +76,7 @@ public class OrderServiceTest extends GenericTest<Order, OrderDTO> {
     @Override
     protected void delete() throws MyDeleteException {
         Mockito.when(((OrderRepository) repository).checkOrderForDeletion(1L)).thenReturn(true);
-//        Mockito.when(authorRepository.checkAuthorForDeletion(2L)).thenReturn(false);
+//        Mockito.when(orderRepository.checkOrderForDeletion(2L)).thenReturn(false);
         Mockito.when(repository.save(OrderTestData.ORDER_1)).thenReturn(OrderTestData.ORDER_1);
         Mockito.when(repository.findById(1L)).thenReturn(Optional.of(OrderTestData.ORDER_1));
         log.info("Testing delete() before: " + OrderTestData.ORDER_1.isDeleted());
