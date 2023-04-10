@@ -89,7 +89,6 @@
                                onclick="return confirm('Вы действительно хотите удалить этот вид мусора?')">Удалить</a>
                             <a th:if="${waste.getIsDeleted()}" class="btn btn-sm btn-outline-warning" th:href="'/wastes/restore/' + ${waste.getId()}">Восстановить</a>
                         </div>
-<!--                        TODO: подумать над созданием заказа-->
                         <a th:if="${waste.getPoints() != null && waste.getPoints().size() > 0}" sec:authorize="hasRole('USER')" class="btn btn-sm btn-outline-success"
                            th:href="'/order/fromWaste/' + ${waste.id}">Создать заказ</a>
                     </td>

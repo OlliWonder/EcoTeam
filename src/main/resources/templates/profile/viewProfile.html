@@ -85,9 +85,15 @@
                class="btn btn-warning"
                aria-disabled="true">Изменить пароль</a>
             <a sec:authorize="isAuthenticated() && (hasRole('ADMIN'))"
+               th:if="${role == 'USER'}"
                th:href="'/order/user-orders/' + ${user.id}"
                class="btn btn-primary"
                aria-disabled="true">Заказы</a>
+            <a sec:authorize="isAuthenticated() && (hasRole('ADMIN'))"
+               th:if="${role == 'AGENT'}"
+               th:href="'/order/agent-orders/' + ${user.id}"
+               class="btn btn-primary"
+               aria-disabled="true">Заявки</a>
             <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
         </div>
     </div>

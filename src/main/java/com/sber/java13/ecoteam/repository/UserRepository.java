@@ -39,4 +39,14 @@ public interface UserRepository extends GenericRepository<User> {
                     and o.is_completed = false
                     """)
     List<String> getAgentsEmails();
+    
+    @Query("""
+            select case when count(u) > 0 then false else true end
+            from User u
+            left join u.orders o on u = o.user
+            where u.id = :userId
+            and o.isCompleted = false
+            or u.point != null
+            """)
+    boolean checkUserForDeletion(final Long userId);
 }

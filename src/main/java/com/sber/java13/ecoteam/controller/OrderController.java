@@ -6,7 +6,6 @@ import com.sber.java13.ecoteam.service.PointService;
 import com.sber.java13.ecoteam.service.UserService;
 import com.sber.java13.ecoteam.service.WasteService;
 import com.sber.java13.ecoteam.service.userdetails.CustomUserDetails;
-import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
-@Hidden
 @RequestMapping("/order")
 public class OrderController {
     private final OrderService orderService;

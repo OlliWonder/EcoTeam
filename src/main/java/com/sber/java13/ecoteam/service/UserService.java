@@ -1,5 +1,6 @@
 package com.sber.java13.ecoteam.service;
 
+import com.sber.java13.ecoteam.constants.Errors;
 import com.sber.java13.ecoteam.constants.MailConstants;
 import com.sber.java13.ecoteam.dto.RoleDTO;
 import com.sber.java13.ecoteam.dto.UserDTO;
@@ -31,6 +32,7 @@ import static com.sber.java13.ecoteam.constants.UserRolesConstants.ADMIN;
 public class UserService extends GenericService<User, UserDTO> {
     private final JavaMailSender javaMailSender;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
     
     protected UserService(UserRepository userRepository,
                           UserMapper userMapper,
@@ -39,6 +41,7 @@ public class UserService extends GenericService<User, UserDTO> {
         super(userRepository, userMapper);
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.javaMailSender = javaMailSender;
+        this.userRepository = userRepository;
     }
     
     public UserDTO getUserByLogin(final String login) {
@@ -47,10 +50,6 @@ public class UserService extends GenericService<User, UserDTO> {
     
     public UserDTO getUserByEmail(final String email) {
         return mapper.toDTO(((UserRepository) repository).findUserByEmail(email));
-    }
-    
-    public Boolean checkPassword(String password, UserDetails userDetails) {
-        return bCryptPasswordEncoder.matches(password, userDetails.getPassword());
     }
     
     @Override
@@ -107,8 +106,14 @@ public class UserService extends GenericService<User, UserDTO> {
     public void delete(Long id) throws MyDeleteException {
         User user = repository.findById(id).orElseThrow(
                 () -> new NotFoundException("Пользователя с заданным ID=" + id + " не существует"));
-        markAsDeleted(user);
-        repository.save(user);
+        boolean userCanBeDeleted = userRepository.checkUserForDeletion(id);
+        if (userCanBeDeleted) {
+            markAsDeleted(user);
+            repository.save(user);
+        }
+        else {
+            throw new MyDeleteException(Errors.Users.USER_DELETE_ERROR);
+        }
     }
     
     public void restore(Long objectId) {

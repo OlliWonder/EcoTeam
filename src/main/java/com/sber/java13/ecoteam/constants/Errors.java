@@ -11,6 +11,7 @@ public interface Errors {
     
     class Users {
         public static final String USER_FORBIDDEN_ERROR = "У вас нет прав просматривать информацию о пользователе";
+        public static final String USER_DELETE_ERROR = "Пользователь не может быть удалён, так как у него есть активные заявки";
     }
     
     class Points {

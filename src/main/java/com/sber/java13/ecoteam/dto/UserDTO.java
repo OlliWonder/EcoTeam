@@ -26,4 +26,5 @@ public class UserDTO extends GenericDTO {
     private RoleDTO role;
     private Set<Long> ordersIds;
     private Long pointId;
+    private boolean isDeleted;
 }

@@ -28,7 +28,8 @@ public interface WasteRepository extends GenericRepository<Waste> {
     
     @Query(value = """
             select case when count(w) > 0 then false else true end
-            from Waste w join w.orders o on w = o.waste
+            from Waste w
+            join w.orders o on w = o.waste
             where w.id = :wasteId
             and o.isCompleted = false
             """)

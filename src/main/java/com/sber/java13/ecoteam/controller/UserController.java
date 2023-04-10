@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -113,6 +114,7 @@ public class UserController {
             }
         }
         model.addAttribute("user", userService.getOne(Long.valueOf(id)));
+        model.addAttribute("role", userService.getOne(Long.valueOf(id)).getRole().getTitle());
         model.addAttribute("pointService", pointService);
         return "profile/viewProfile";
     }
@@ -240,5 +242,14 @@ public class UserController {
         Long roleId = 3L;
         userService.create(userDTO, roleId);
         return "redirect:/users/list";
+    }
+    
+    @ExceptionHandler({MyDeleteException.class, AccessDeniedException.class})
+    public RedirectView handleError(HttpServletRequest req,
+                                    Exception ex,
+                                    RedirectAttributes redirectAttributes) {
+        log.error("Запрос: " + req.getRequestURL() + " вызвал ошибку " + ex.getMessage());
+        redirectAttributes.addFlashAttribute("exception", ex.getMessage());
+        return new RedirectView("/users/list", true);
     }
 }

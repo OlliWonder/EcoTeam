@@ -97,7 +97,6 @@
                             <a th:if="${point.getIsDeleted()}" class="btn btn-sm btn-outline-warning"
                                th:href="'/points/restore/' + ${point.getId()}">Восстановить</a>
                         </div>
-                        <!--                        TODO: подумать над созданием заказа-->
                         <a th:if="${point.getWastes() != null && point.getWastes().size() > 0}"
                            sec:authorize="hasRole('USER')" class="btn btn-sm btn-outline-success"
                            th:href="'/order/fromPoint/' + ${point.id}">Создать заказ</a>
