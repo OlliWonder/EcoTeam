@@ -27,7 +27,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static com.sber.java13.ecoteam.constants.UserRolesConstants.ADMIN;
-import static com.sber.java13.ecoteam.constants.UserRolesConstants.AGENT;
 
 @Controller
 @RequestMapping("/users")
