@@ -12,8 +12,6 @@ public interface PointRepository extends GenericRepository<Point> {
     
     Page<Point> findAllByIsDeletedFalse(Pageable pageable);
     
-    Page<Point> findAllByCityContainsIgnoreCaseAndIsDeletedFalse(String city, Pageable pageable);
-    
     @Query(nativeQuery = true,
             value = """
                     select p.*
